@@ -73,6 +73,7 @@ namespace Code
         {
             if(input == Vector2.zero) return;
             player.position += transform.forward * movingSpeed * Time.deltaTime;
+            if(jumpCount > 0 && jumpCount < 3) return;
             player.RotateAround(player.position, Vector3.up, rotationSpeed * input.x * Time.deltaTime);
         }
 
