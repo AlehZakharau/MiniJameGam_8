@@ -25,7 +25,6 @@ namespace Code.UI
 
         public void Notify(EContext ev)
         {
-            
             switch (ev)
             {
                 case EContext.NewGame:
