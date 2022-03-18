@@ -35,6 +35,15 @@ public partial class @Actions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""97f1c5cf-3af8-4143-b691-7d1230d3c131"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -92,6 +101,17 @@ public partial class @Actions : IInputActionCollection2, IDisposable
                     ""action"": ""Moving"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""14d38a19-038c-4efe-9c98-ca6e8f114dc0"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -107,6 +127,7 @@ public partial class @Actions : IInputActionCollection2, IDisposable
         // Payer
         m_Payer = asset.FindActionMap("Payer", throwIfNotFound: true);
         m_Payer_Moving = m_Payer.FindAction("Moving", throwIfNotFound: true);
+        m_Payer_Jump = m_Payer.FindAction("Jump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -167,11 +188,13 @@ public partial class @Actions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Payer;
     private IPayerActions m_PayerActionsCallbackInterface;
     private readonly InputAction m_Payer_Moving;
+    private readonly InputAction m_Payer_Jump;
     public struct PayerActions
     {
         private @Actions m_Wrapper;
         public PayerActions(@Actions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Moving => m_Wrapper.m_Payer_Moving;
+        public InputAction @Jump => m_Wrapper.m_Payer_Jump;
         public InputActionMap Get() { return m_Wrapper.m_Payer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -184,6 +207,9 @@ public partial class @Actions : IInputActionCollection2, IDisposable
                 @Moving.started -= m_Wrapper.m_PayerActionsCallbackInterface.OnMoving;
                 @Moving.performed -= m_Wrapper.m_PayerActionsCallbackInterface.OnMoving;
                 @Moving.canceled -= m_Wrapper.m_PayerActionsCallbackInterface.OnMoving;
+                @Jump.started -= m_Wrapper.m_PayerActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_PayerActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_PayerActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_PayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -191,6 +217,9 @@ public partial class @Actions : IInputActionCollection2, IDisposable
                 @Moving.started += instance.OnMoving;
                 @Moving.performed += instance.OnMoving;
                 @Moving.canceled += instance.OnMoving;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
         }
     }
@@ -207,5 +236,6 @@ public partial class @Actions : IInputActionCollection2, IDisposable
     public interface IPayerActions
     {
         void OnMoving(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
 }
