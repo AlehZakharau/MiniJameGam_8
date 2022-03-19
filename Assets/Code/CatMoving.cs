@@ -11,6 +11,7 @@ namespace Code
         [SerializeField] private float rotationSpeed = 100f;
         [Header("Jumping")] 
         [SerializeField] private Transform groundChecker;
+        [SerializeField] private Transform faceChecker;
         [SerializeField] private float groundCheckerRadius = 2f;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private float jumpHigh = 2f;
@@ -44,7 +45,7 @@ namespace Code
         {
             gravity.y += gravityForce * Time.deltaTime;
             
-            if (IsGrounded())
+            if (IsGrounded(groundChecker))
             {
                 jumpCount = 0;
                 gravity = Vector3.zero;
@@ -55,24 +56,25 @@ namespace Code
                 if(jumpCount >= JumpMax) return;
                 jumpCount++;
                 gravity.y += gravityForce * -jumpHigh;
-                Debug.Log($"Jump {gravity}");
             }
-            
-            Debug.Log($"gravity {gravity}");
             player.position += gravity * Time.deltaTime;
             
         }
 
-        private bool IsGrounded()
+        private bool IsGrounded(Transform checker)
         {
-            return Physics.CheckSphere(groundChecker.position, groundCheckerRadius, groundLayer);
+            return Physics.CheckSphere(checker.position, groundCheckerRadius, groundLayer);
         }
 
 
         private void MoveCat(Vector2 input)
         {
             if(input == Vector2.zero) return;
-            player.position += transform.forward * movingSpeed * Time.deltaTime;
+            var spin = 1f;
+            if (IsGrounded(faceChecker))
+                spin *= -1f;
+            
+            player.position += transform.forward * spin * movingSpeed * Time.deltaTime;
             if(jumpCount > 0 && jumpCount < 3) return;
             player.RotateAround(player.position, Vector3.up, rotationSpeed * input.x * Time.deltaTime);
         }
