@@ -21,14 +21,12 @@ namespace Code
         private Actions actions;
         private int jumpCount;
         private const int JumpMax = 3;
-
         private Vector3 gravity;
         
         
         private void Start()
         {
-            actions = new Actions();
-            actions.Enable();
+            actions = PlayerInput.Instance.Actions;
         }
 
 
@@ -77,12 +75,6 @@ namespace Code
             player.position += transform.forward * spin * movingSpeed * Time.deltaTime;
             if(jumpCount > 0 && jumpCount < 3) return;
             player.RotateAround(player.position, Vector3.up, rotationSpeed * input.x * Time.deltaTime);
-        }
-
-
-        private void OnDestroy()
-        {
-            actions.Disable();
         }
     }
 }

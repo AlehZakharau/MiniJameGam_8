@@ -14,9 +14,12 @@ namespace Code.UI
         [SerializeField] private Window pauseWindow;
         [SerializeField] private Window creditsWindow;
         [SerializeField] private Window settingsWindow;
+        [SerializeField] private Window tutorialWindow;
 
         private Window previousWindow;
         private Window currentWindow;
+
+        private bool isPause;
 
         private void Start()
         {
@@ -31,12 +34,25 @@ namespace Code.UI
                     SceneManager.LoadScene(sceneBuildIndex: 1);
                     break;
                 case EContext.Continue:
-                    //Continue game
                     currentWindow.CloseWindow();
+                    OpenWindow(mainWindow);
+                    isPause = false;
+                    PlayerInput.Instance.Actions.Payer.Enable();
                     break;
                 case EContext.Pause:
-                    //pause game
-                    OpenWindow(pauseWindow);
+                    if (!isPause)
+                    {
+                        OpenWindow(pauseWindow);
+                        isPause = true;
+                        PlayerInput.Instance.Actions.Payer.Disable();
+                    }
+                    else
+                    {
+                        OpenWindow(mainWindow);
+                        isPause = false;
+                        PlayerInput.Instance.Actions.Payer.Enable();
+                    }
+
                     break;
                 case EContext.Setting:
                     OpenWindow(settingsWindow);
@@ -46,6 +62,9 @@ namespace Code.UI
                     break;
                 case EContext.Back:
                     OpenWindow(previousWindow);
+                    break;
+                case EContext.Tutorial:
+                    OpenWindow(tutorialWindow);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(ev), ev, null);
@@ -68,6 +87,7 @@ namespace Code.UI
         Pause,
         Setting,
         Back,
-        Credits
+        Credits,
+        Tutorial
     }
 }

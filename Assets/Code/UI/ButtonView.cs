@@ -17,6 +17,7 @@ namespace Code.UI
         private void PushButton()
         {
             navigation.Notify(context);
+            Debug.Log($"Context: {context}");
         }
     }
 }

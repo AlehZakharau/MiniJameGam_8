@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5512786922903541272}
   - component: {fileID: 7738781984226632402}
   - component: {fileID: 3956643090394286787}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TileChery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
